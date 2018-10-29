@@ -1,0 +1,75 @@
+
+truffle init
+npm install zeppelin-solidity
+testrpc -u 0
+truffle compile
+truffle migrate
+truffle console
+
+// The account that will buy POD tokens.
+> account1 = web3.eth.accounts[1]
+'0x0fc44ef07337793002f658ec0ef390fbb247fcdb'
+// The address of the POD token instance that was created when the crowdsale contract was deployed
+// assign the result of SPCrowdsale.deployed() to the variable crowdsale
+> SPCrowdsale.deployed().then(inst => { crowdsale = inst })
+undefined
+> crowdsale.token().then(addr => { tokenAddress = addr } )
+> tokenAddress
+'0xda6a4219bdda53c0564e60085d50b41be76647ba'
+> podCoinInstance = PodCoin.at(tokenAddress)
+// Now check the number of POD tokens account1 has. It should have 0
+> podCoinInstance.balanceOf(account1).then(balance => balance.toString(10))
+'0'
+// Buying 1000 POD tokens
+> SPCrowdsale.deployed().then(inst => inst.sendTransaction({ from: account1, value: web3.toWei(0.5, "ether")}))
+undefined
+// Check the amount of POD tokens for account1 again. It should have some now.
+> podCoinInstance.balanceOf(account1).then(balance => account1PODTokenBalance = balance.toString(10))
+'1000000000000000000000'
+// When we created our token we made it with 9 decimals. That's a lot of zeros, let's display without the decimals:
+> web3.fromWei(account1PODTokenBalance, "ether")
+'1000'
+> .exit
+
+
+
+// Local
+Owner: 0x83Bbe1e2a2F353E881Dcd7c57E830C285d7aAB0a
+> owner = web3.eth.accounts[0]
+> podCoinInstance = PodCoin.at('0x81987be1e7dc9e44095bba862080d2053f7efc57')
+> podCoinInstance.balanceOf(owner).then(balance => balance.toString(10))
+> podCoinInstance.checkRole(owner, 'minter')
+> podCoinInstance.mint(owner, 60000000)
+
+sirius regtest gas limit, gas price, address: 2500000 0.00000049 qJYnfX3A7WHKmPkzf19AsAUWRiEQmkUP9Q
+zacanbot: qdRcc9bGMo3X7PVEfpUMvEEZgpXu2kSuA5
+PodCoin: ef35d533f09057854ed4a0a398a0c3484f0bb2da
+
+Sirius mainnet
+sender: SaXYFjEbvE8eT5erXDa4396nXGojUqsuCc
+owner: 91291b0cf1cdbda197a4f2afb5bc72f069a94a0d
+PodCoin: 118ed9f558f202ec3e4e4b0f823301d8c42acaa1
+functionHashes
+{
+    "66188463": "decreaseApproval(address,uint256)",
+    "dd62ed3e": "allowance(address,address)",
+    "095ea7b3": "approve(address,uint256)",
+    "70a08231": "balanceOf(address)",
+    "42966c68": "burn(uint256)",
+    "313ce567": "decimals()",
+    "7d64bcb4": "finishMinting()",
+    "d73dd623": "increaseApproval(address,uint256)",
+    "40c10f19": "mint(address,uint256)",
+    "05d2035b": "mintingFinished()",
+    "06fdde03": "name()",
+    "8da5cb5b": "owner()",
+    "8456cb59": "pause()",
+    "5c975abb": "paused()",
+    "95d89b41": "symbol()",
+    "18160ddd": "totalSupply()",
+    "a9059cbb": "transfer(address,uint256)",
+    "23b872dd": "transferFrom(address,address,uint256)",
+    "f2fde38b": "transferOwnership(address)",
+    "3f4ba83a": "unpause()"
+}
+
